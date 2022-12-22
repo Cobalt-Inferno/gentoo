@@ -15,12 +15,14 @@ class Users:
         self.users = users
         for user in self.users:
             print(user)
-            print(user['python'])
-#            self.init_user(user)
+            self.init_user(user)
     def init_user(self, user):
         if 'name' in user:
+            print('Name detected.')
             if 'passwd' in user:
+                print('Passwd detected.')
                 if 'groups' in user:
+                    print('Groups detected.')
                     subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd'], '-G', ','.join(user['groups'])])
                 else:
                     subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd']])
