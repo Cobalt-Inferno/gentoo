@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 def run_cmd(cmd):
     subprocess.call(cmd)
@@ -34,7 +35,12 @@ class Drive:
         subprocess.call(['mount', partition, location])
     def set_fstab(self):
         if 'fs' in self.drive:
-            write_file('/etc/fstab', concat_str([self.drive['boot'] , '  ' , '/boot' , '   ' , self.drive['fs'] , '    ' , 'defaults' , '    ' , '0 2']))
+            write_file('/etc/fstab', concat_str([self.drive['boot'] , '  ' , '/boot' , '   ' , 'vfat' , '    ' , 'defaults' , '    ' , '0 2']))
+            append_file('/etc/fstab', concat_str([input('Enter second drive name: ') , '  ' , '/' , '   ' , self.drive['fs'] , '    ' , 'defaults' , '    ' , '0 2']))
+
+    def set_grub(self):
+        run_cmd(['grub-install', '--target=x86_64-efi', '--efi-directory=/boot'])
+        run_cmd(['grub-mkconfig', '-o', '/boot/grub/grub.cfg'])
 class Users:
     def __init__(self,users):
         self.users = users
@@ -97,6 +103,26 @@ class Config:
             eselect('locale')           
             run_cmd(['env-update'])
         run_cmd(['emerge', '--ask', 'sys-kernel/linux-firmware'])
+    def install_pkgs(self):
+        def inst(pkg):
+            run_cmd(['emerge', '--ask', pkg])
+        if 'init-system' in self.config:
+            if self.config['init-system'] == 'openrc':
+                inst('net-misc/dhcpcd')
+                run_cmd(['rc-update', 'add', 'dhcpcd', 'default'])
+                run_cmd(['rc-service', 'dhcpcd', 'start'])
+                inst('app-admin/sysklogd')
+                run_cmd(['rc-update', 'add', 'sysklogd', 'default'])
+                run_cmd(['rc-update', 'add', 'sshd', 'default'])
+                inst('net-misc/chrony')
+                run_cmd(['rc-update', 'add', 'chronyd', 'default'])
+    def set_grub(self):
+        def inst(pkg):
+            run_cmd(['emerge', '--ask', pkg])
+        if 'init-system' in self.config:
+            append_file('/etc/portage/make.conf', 'GRUB_PLATFORMS="efi-64"')
+            inst('sys-boot/grub')
+
 class Portage:
     def __init__(self, config) -> None:
         self.config = config
@@ -136,3 +162,9 @@ x.generic()
 emerge.install_kernel()
 v.set_fstab()
 emerge.genkernel()
+if os.path.exists('/etc/conf.d/'):
+    write_file('/etc/conf.d/hostname', concat_str(['hostname="', input("What's your username? "), '"']))
+x.install_pkgs()
+x.set_grub()
+v.set_grub()
+
