@@ -66,7 +66,5 @@ def load_config() -> Config:
         return Config(json.load(f))
 
 x = load_config()
-
-
-
-
+v = x.conf['drive']
+v.mount_boot_drive()
