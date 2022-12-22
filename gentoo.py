@@ -15,6 +15,7 @@ class Users:
         self.users = users
         for user in self.users:
             print(user)
+            print(user['python'])
 #            self.init_user(user)
     def init_user(self, user):
         if 'name' in user:
