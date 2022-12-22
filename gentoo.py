@@ -14,7 +14,8 @@ class Users:
     def __init__(self,users):
         self.users = users
         for user in self.users:
-            self.init_user(user)
+            print(user)
+#            self.init_user(user)
     def init_user(self, user):
         if 'name' in user:
             if 'passwd' in user:
