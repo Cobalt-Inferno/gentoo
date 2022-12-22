@@ -156,7 +156,7 @@ def load_config() -> Config:
 x = load_config()
 v = x.conf['drive']
 v.mount_boot_drive()
-emerge = x.config['portage']
+emerge = x.conf['portage']
 emerge.world()
 emerge.set_use_flags()
 x.generic()
