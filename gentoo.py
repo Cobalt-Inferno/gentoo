@@ -23,15 +23,15 @@ class Users:
                 print('Passwd detected.')
                 if 'groups' in user:
                     print('Groups detected.')
-                    subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd'], '-G', ','.join(user['groups'])])
-                    print(['useradd', '-m', user['name'], '-p', user['passwd'], '-G', ','.join(user['groups'])])
+#                    subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd'], '-G', ','.join(user['groups'])])
+#                    print(['useradd', '-m', user['name'], '-p', user['passwd'], '-G', ','.join(user['groups'])])
 
                 else:
-                    subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd']])
+#                    subprocess.call(['useradd', '-m', user['name'], '-p', user['passwd']])
                     print(['useradd', '-m', user['name'], '-p', user['passwd']])
 
             else:
-                subprocess.call(['useradd', '-m', user['name']])
+#                subprocess.call(['useradd', '-m', user['name']])
                 print((['useradd', '-m', user['name']]))
 
         else:
