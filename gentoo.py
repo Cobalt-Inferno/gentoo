@@ -157,6 +157,7 @@ x = load_config()
 v = x.conf['drive']
 v.mount_boot_drive()
 emerge = x.config['portage']
+emerge.world()
 emerge.set_use_flags()
 x.generic()
 emerge.install_kernel()
