@@ -145,6 +145,7 @@ class Portage:
                 f.write('ACCEPT_LICENSE="-* @FREE @BINARY-REDISTRIBUTABLE"')
         f.close()
     def install_kernel(self):
+        self.install_pkg('sys-kernel/gentoo-sources')
         eselect('kernel')
         self.install_pkg('sys-kernel/genkernel')
     def genkernel(self):
